@@ -1,5 +1,6 @@
 package com.admin.demo.service.impl;
 
+import com.admin.common.exception.BadRequestException;
 import com.admin.demo.entity.Department;
 import com.admin.demo.mapper.DepartmentMapper;
 import com.admin.demo.service.DepartmentService;
@@ -47,4 +48,70 @@ public class DepartmentServiceImpl implements DepartmentService {
         return list;
     }
 
+    @Override
+    public List<Department> query(String keywords, boolean enabled) {
+        return departmentMapper.query(keywords,enabled);
+    }
+
+    @Override
+    public Object getDept(List<Department> departments) {
+        List<Department> trees = new ArrayList<Department>();
+        for (Department department : departments) {
+            if ("0".equals(department.getPid().toString())) {
+                trees.add(department);
+            }
+            for (Department it : departments) {
+                if (it.getPid().equals(department.getId())) {
+                    if (department.getChildren() == null) {
+                        department.setChildren(new ArrayList<Department>());
+                    }
+                    department.getChildren().add(it);
+                }
+            }
+        }
+        Integer totalElements = departments!=null?departments.size():0;
+        Map map = new HashMap();
+        map.put("content",trees.size() == 0?departments:trees);
+        map.put("totalElements",totalElements);
+        return map;
+    }
+
+    @Override
+    public void addDept(Department department) {
+        Integer i = departmentMapper.check(department);
+        if (i>0){
+            throw new BadRequestException("该部门已存在");
+        }
+
+        departmentMapper.addDept(department);
+    }
+
+    @Override
+    public void delDept(Long id) {
+        Integer i = departmentMapper.checkRelated(id);
+        departmentMapper.delRoleDept(id);
+
+        List<Department> departments = departmentMapper.findByPid(id);
+                if(departments.size()>0){
+                    throw new BadRequestException("该部门存在子部门，请先删除下级部门");
+                }
+
+        if (i>0){
+            throw new BadRequestException("该部门存在用户关联或职位关联，不能删除");
+        }
+
+        departmentMapper.delDept(id);
+    }
+
+    @Override
+    public void updateDept(Department department) {
+        Integer i = departmentMapper.check(department);
+        if (i>0){
+            throw new BadRequestException("该部门已存在");
+        }
+        departmentMapper.updateDept(department);
+    }
+
 }
+
+

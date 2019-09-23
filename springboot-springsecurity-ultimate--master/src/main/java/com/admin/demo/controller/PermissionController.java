@@ -37,7 +37,6 @@ public class PermissionController {
     public ResponseEntity getPermission(@RequestParam(defaultValue = "") String keywords){
         List<Permission> permissions = permissionService.findByKeywords(keywords);
         return  ResponseEntity.ok(permissionService.getPermission(permissions));
-
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSIONS_ALL','PERMISSIONS_CREATE')")

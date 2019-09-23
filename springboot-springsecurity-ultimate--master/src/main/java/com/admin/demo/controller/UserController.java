@@ -7,8 +7,6 @@ import com.admin.common.utils.SecurityUtils;
 import com.admin.common.utils.ServerResponse;
 import com.admin.demo.entity.AuthenticationInfo;
 import com.admin.demo.entity.QueryVo;
-
-import com.admin.demo.entity.Role;
 import com.admin.demo.entity.User;
 import com.admin.demo.service.DepartmentService;
 import com.admin.demo.service.RoleService;

@@ -11,4 +11,15 @@ public interface DepartmentService {
     List<Department> findByPid(Long id);
 
     Object  buildTree(List<Department> departments);
+
+    List<Department> query(String keywords, boolean b);
+
+    Object getDept(List<Department> departments);
+
+    void addDept(Department department);
+
+    void delDept(Long id);
+
+    void updateDept(Department department);
+
 }

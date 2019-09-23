@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
+
 @Getter
 @Setter
 public class Department  {
@@ -15,12 +17,10 @@ public class Department  {
     private Boolean enabled;
 
     private Long pid;
-
-
     //private Set<Role> roles;
-
     private Timestamp createTime;
 
+    private List<Department> children;
     @Override
     public String toString() {
         return "Department{" +
