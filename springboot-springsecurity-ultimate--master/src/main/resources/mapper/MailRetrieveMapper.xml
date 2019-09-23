@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.MailRetrieveMapper">
+    <select id="findByAccount" resultType="com.admin.demo.entity.MailRetrieve">
+        select * from mail_reset where account=#{account}
+    </select>
+    <delete id="delete">
+        delete  from mail_reset where account=#{account}
+    </delete>
+    <insert id="save">
+        insert into mail_reset(account,sid,out_time)
+        values (#{account},#{sid},#{outTime})
+    </insert>
+<update id="update">
+    update mail_reset set out_time=0 where account=#{account}
+</update>
+</mapper>

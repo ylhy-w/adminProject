@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.admin.demo.entity.User">
+        <id column="id" property="id"/>
+        <result column="phone" property="phone"/>
+        <result column="enabled" property="enabled"/>
+        <result column="username" property="username"/>
+        <result column="picture" property="picture"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="deptId" property="deptId"/>
+        <result column="posId" property="posId"/>
+        <result column="create_time" property="create_time"/>
+        <result column="accountNonLocked" property="accountNonLocked"/>
+        <collection property="departments" ofType="com.admin.demo.entity.Department">
+            <id property="id" column="deptId" />
+            <result property="name" column="dname"/>
+        </collection>
+        <collection property="positions" ofType="com.admin.demo.entity.Position">
+            <id property="id" column="posId" />
+            <result property="name" column="pname"/>
+            <result property="deptId" column="deptId"/>
+        </collection>
+    </resultMap>
+
+
+    <!--获取user的角色构建权限，必写-->
+    <resultMap id="lazyLoadPermissions" type="com.admin.demo.entity.User" extends="BaseResultMap">
+        <collection property="permissions" ofType="com.admin.demo.entity.Permission" select="com.admin.demo.mapper.UserMapper.getPermissionById"
+                    column="id" >
+        </collection>
+        <collection property="roles" ofType="com.admin.demo.entity.Role" select="com.admin.demo.mapper.UserMapper.getRolesById"
+                    column="id">
+        </collection>
+    </resultMap>
+
+    <select id="getPermissionById" resultType="com.admin.demo.entity.Permission" >
+        SELECT p.*  FROM roles_permissions r1,permission p,users_roles u,role r
+        WHERE
+                     u.role_id=r.id
+          AND u.user_id= #{id}
+          AND r1.permission_id=p.id
+          AND r1.role_id=r.id
+    </select>
+
+    <select id="getRolesById" resultType="com.admin.demo.entity.Role" >
+        SELECT r.*  FROM role r,users_roles u WHERE  u.role_id=r.id AND u.user_id= #{id}
+    </select>
+
+    <!-- 登录/个人信息-->
+    <select id="getUser" resultMap="lazyLoadPermissions">
+        SELECT d.name as dname,p.name as pname,u.* FROM user u LEFT JOIN department d ON u.deptId=d.id LEFT JOIN position p on u.posId=p.id WHERE u.username=#{username}
+    </select>
+    <!-- 注册-->
+    <insert id="register" useGeneratedKeys="true" keyProperty="id" parameterType="com.admin.demo.entity.User">
+        insert into user set username=#{username},password=#{password},email=#{email},create_time=now()
+    </insert>
+    <!--注册错误次数记录表-->
+    <insert id="regAttempts">
+        insert into password_attempts (user_id,last_time) values
+            (#{user_id},now())
+    </insert>
+    <!-- 用户名·校验-->
+    <select id="checkUsername"  resultType="Integer">
+        select count(*) from user WHERE username=#{username}
+    </select>
+    <!-- 获得错误次数-->
+    <select id="getAttempts" resultType="Integer">
+        select attempts from password_attempts where user_id =#{id}
+    </select>
+    <!-- 记录错误次数-->
+    <update id="errorLogin">
+        update password_attempts
+        set last_time =now(),attempts=attempts+1
+        where user_id = #{user_id}
+    </update>
+    <!-- 修改用户-->
+    <update id="updateUser" parameterType="com.admin.demo.entity.User">
+        update user
+        <set>
+            <if test="username != null ">
+                username = #{username},
+            </if>
+            <if test="phone != null ">
+                phone = #{phone},
+            </if>
+            <if test="posId != null ">
+                posId = #{posId},
+            </if>
+            <if test="deptId != null ">
+                deptId = #{deptId},
+            </if>
+            <if test="picture != null">
+                picture = #{picture},
+            </if>
+            <if test="accountNonLocked != null">
+                accountNonLocked = 1,
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 登陆成功重置错误次数-->
+    <update id="reset">
+        update password_attempts set attempts = 0,last_time = now() where user_id = #{id}
+    </update>
+
+    <!-- 更改密码-->
+    <update id="updatePassword">
+        update user set password = #{password},last_password_reset_time=now() where username = #{username}
+    </update>
+    <!-- 更改邮箱-->
+    <update id="updateEmail">
+        update user set email = #{email} where username = #{username}
+    </update>
+<!-- deptIds 不为空-->
+
+    <select id="queryAll" resultMap="BaseResultMap" parameterType="com.admin.demo.entity.QueryVo">
+    select u.* ,p.`name`AS pname,d.`name` AS dname FROM user u,position p,department d
+    where
+    u.`posId`=p.`id`and u.`deptId`=d.id
+    <if test="deptId!=null">
+      and u.`deptId`=#{deptId}
+      </if>
+    and d.name LIKE concat('%',#{deptName},'%')
+      and u.username LIKE concat('%',#{name},'%')
+      and u.enabled=#{enabled}
+      and u.deptId in
+    <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
+          #{deptIds}
+    </foreach>
+    limit #{page},#{size}
+</select>
+
+    <!-- deptIds 为空-->
+    <select id="query" resultMap="BaseResultMap" parameterType="com.admin.demo.entity.QueryVo">
+    select u.* ,p.`name`AS pname,d.`name` AS dname
+    FROM user u,position p,department d where u.`posId`=p.`id`and u.`deptId`=d.id
+    <if test="deptId!=null">
+        and u.`deptId`= #{deptId}
+    </if>
+    and d.name LIKE concat('%',#{deptName},'%')
+    and u.username LIKE concat('%',#{name},'%')
+    and u.enabled=#{enabled}
+    limit #{page},#{size}
+</select>
+
+    <select id="countAll" resultType="Integer" >
+        select  count(*) FROM user u,position p,department d
+        where u.`posId`=p.`id`
+                and u.`deptId`=d.id
+        <if test="deptId!=null">
+            and u.`deptId`=#{deptId}
+        </if>
+        and  d.name LIKE concat('%',#{deptName},'%')
+        and  u.username LIKE concat('%',#{name},'%')
+        and u.enabled=#{enabled}
+        and u.deptId in
+        <foreach collection="deptIds" item="deptIds" open="(" close=")" separator=",">
+            #{deptIds}
+        </foreach>
+    </select>
+
+
+    <select id="count" resultType="Integer" >
+        select  count(*) FROM user u,position p,department d
+        where u.`posId`=p.`id`
+          and u.`deptId`=d.id
+        <if test="deptId!=null">
+            and u.`deptId`=#{deptId}
+        </if>
+        and  d.name LIKE concat('%',#{deptName},'%')
+        and  u.username LIKE concat('%',#{name},'%')
+        and u.enabled=#{enabled}
+    </select>
+
+    <select id="findByAccount" resultType="com.admin.demo.entity.User">
+        select * from user where username =#{account}
+    </select>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.admin.demo.entity.User">
+        insert into user (username,password,create_time,phone,deptId,posId,enabled)
+        values
+        (#{username},#{password},now(),#{phone},#{deptId},#{posId},#{enabled})
+    </insert>
+
+    <insert id="addUserRole" >
+        insert into users_roles(user_id,role_id) values
+        <foreach collection="rids" item="role_id" separator=",">
+            (#{id},#{role_id})
+        </foreach>
+    </insert>
+
+    <delete id="delUser">
+        delete from user where id = #{id}
+    </delete>
+
+
+    <delete id="delUserRole">
+        delete from users_roles where user_id = #{id}
+    </delete>
+
+        <select id="check" resultType="Integer">
+     select count(*) from user where username=#{username} and id!=#{id}
+        </select>
+
+    <select id="findById" resultMap="lazyLoadPermissions">
+        SELECT d.name as dname,p.name as pname,u.* FROM user u LEFT JOIN department d ON u.deptId=d.id LEFT JOIN position p on u.posId=p.id WHERE u.id=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,84 @@
+spring:
+  datasource:
+    username: root
+    password: 996211
+    url: jdbc:mysql://localhost/gitdemo?characterEncoding=utf-8&useSSl=false&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat,wall
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: false
+    maxPoolPreparedStatementPerConnectionSize: 20
+    connectionProperties:
+      druid:
+        stat:
+          mergeSql: true
+          slowSqlMillis: 5000
+
+  redis:
+    host: 47.101.190.181
+    port: 6379
+    password: 996211
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+
+  mail:
+    host: smtp.qq.com
+    username: 1184071961
+    password: hhdzqwmqjlzjggja
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable=true:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
+
+
+
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.admin.demo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 80
+
+
+#token:
+#  expirationSeconds: 3600
+#  validTime: 7
+
+jwt:
+  header: Authorization
+  secret: wteam
+  # token 过期时间 2个小时 7200000
+
+  expiration: 7200000
+  auth:
+    # 授权路径
+    path: /login
+    # 获取用户信息
+    account: /details
+

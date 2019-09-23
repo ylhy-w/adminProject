@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.PermissionMapper">
+
+
+
+    <select id="getAllPermission" resultType="Integer">
+        SELECT id from  permission
+    </select>
+
+    <select id="buildTree" resultType="com.admin.demo.entity.Permission">
+        select * from permission where id  in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="findByPid" resultType="com.admin.demo.entity.Permission">
+        SELECT * from  permission where pid=#{id}
+    </select>
+
+
+    <select id="findByKeywords" resultType="com.admin.demo.entity.Permission">
+        SELECT * from  permission
+        where
+        alias LIKE concat('%',#{keywords},'%')
+        or
+        name LIKE concat('%',#{keywords},'%')
+    </select>
+
+    <insert id="addPermission">
+        insert  into  permission(alias,name,pid,create_time)
+        values (#{alias},#{name},#{pid},now())
+    </insert>
+
+    <select id="check" resultType="Integer">
+        select count(*) from permission where name = #{name}
+        <if test="id !=null">
+            and id!=#{id}
+        </if>
+    </select>
+
+    <delete id="delPermission">
+        delete from permission where id = #{id}
+    </delete>
+
+    <delete id="delRolePermission">
+        delete from roles_permissions where permission_id = #{id}
+    </delete>
+
+    <update id="updatePermission">
+        update permission
+        <set>
+            <if test="name != null ">
+                name = #{name},
+            </if>
+            <if test="alias != null">
+                alias = #{alias},
+            </if>
+            <if test="pid != null">
+                pid = #{pid}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

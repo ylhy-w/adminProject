@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.PictureMapper">
+    <resultMap id="picture" type="com.admin.demo.entity.Picture">
+        <id property="id" column="id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delete" column="delete_url"/>
+        <result property="filename" column="filename"/>
+        <result property="height" column="height"/>
+        <result property="width" column="width"/>
+        <result property="size" column="size"/>
+        <result property="url" column="url"/>
+        <result property="username" column="username"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into picture (filename,url,size,height,width,delete_url,username,create_time)
+        values (#{filename},#{url},#{size},#{height},#{width},#{delete},#{username},NOW())
+    </insert>
+    <delete id="delete">
+        delete from picture where id = #{id}
+    </delete>
+    <select id="findById" resultMap="picture">
+        select * from picture where id = #{id}
+    </select>
+    <select id="getPictures" resultType="picture">
+        select * from picture where filename LIKE concat('%',#{keywords},'%') limit #{start},#{size}
+    </select>
+    <select id="getCount" resultType="Integer">
+        select count(*) from picture where filename LIKE concat('%',#{keywords},'%')
+    </select>
+</mapper>

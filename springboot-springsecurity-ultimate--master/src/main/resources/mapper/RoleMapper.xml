@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.RoleMapper">
+    <select id="findByUsers_Id" resultType="com.admin.demo.entity.Role">
+        SELECT r.*  FROM role r,users_roles u WHERE  u.role_id=r.id AND u.user_id= #{id}
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.admin.demo.entity.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="create_time" property="createTime"/>
+        <result column="remark" property="remark"/>
+        <result column="data_scope" property="dataScope"/>
+        <result column="level" property="level"/>
+    </resultMap>
+
+    <resultMap id="LoadPermissions" type="com.admin.demo.entity.Role" extends="BaseResultMap">
+        <collection property="permissions" ofType="com.admin.demo.entity.Permission" select="com.admin.demo.mapper.RoleMapper.getPermission"
+                    column="id">
+        </collection>
+        <collection property="menus" ofType="com.admin.demo.entity.Menu" select="com.admin.demo.mapper.RoleMapper.getMenu"
+                    column="id">
+        </collection>
+        <collection property="depts" ofType="com.admin.demo.entity.Department" select="com.admin.demo.mapper.RoleMapper.getDept"
+                    column="id">
+        </collection>
+    </resultMap>
+
+
+    <select id="getRoles" resultMap="LoadPermissions">
+        select * from role  where name LIKE concat('%',#{keywords},'%') or remark LIKE concat('%',#{keywords},'%') order by level limit #{start},#{size}
+    </select>
+
+    <select id="getRolesCount" resultType="Integer">
+        select count(*) from role where name LIKE concat('%',#{keywords},'%') or remark LIKE concat('%',#{keywords},'%')
+    </select>
+
+
+<select id="getPermission" resultType="com.admin.demo.entity.Permission" >
+SELECT p.*  FROM roles_permissions rp,permission p,role r WHERE   rp.role_id=r.id and rp.permission_id = p.id and r.id=#{id}
+</select>
+
+    <select id="getMenu" resultType="com.admin.demo.entity.Menu" >
+    SELECT m.*  FROM roles_menus rm,menu m,role r WHERE   rm.role_id=r.id and rm.menu_id = m.id and r.id=#{id}
+</select>
+
+    <select id="getDept" resultType="com.admin.demo.entity.Department" >
+        SELECT d.*  FROM roles_depts rd,department d,role r WHERE   rd.role_id=r.id and rd.dept_id = d.id and r.id=#{id}
+    </select>
+
+    <select id="check" resultType="Integer" >
+        SELECT count(*) from role where name=#{name}
+        <if test="id != null ">
+           and id!= #{id}
+        </if>
+    </select>
+
+    <select id="updateRoles" parameterType="com.admin.demo.entity.Role">
+        update role
+        <set>
+            <if test="name != null ">
+                name = #{name},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="dataScope != null">
+                data_scope = #{dataScope},
+            </if>
+            <if test="level != null">
+                level = #{level}
+            </if>
+        </set>
+        where id = #{id}
+    </select>
+<select id="checkRelated" resultType="Integer">
+    SELECT COUNT(*) FROM users_roles where `role_id`=#{rid}
+</select>
+
+    <delete id="delRoles">
+        delete from role where id = #{rid}
+    </delete>
+
+    <delete id="deleteMenuByRid" parameterType="long">
+        DELETE FROM roles_menus WHERE role_id=#{rid}
+    </delete>
+
+    <insert id="menuRoles">
+        INSERT INTO roles_menus(menu_id,role_id) VALUES
+        <foreach collection="mids" item="mid" separator=",">
+            (#{mid},#{rid})
+        </foreach>
+    </insert>
+
+    <delete id="deletePermissionByRid" parameterType="long">
+        DELETE FROM roles_permissions WHERE role_id=#{rid}
+    </delete>
+
+    <insert id="permissionRoles">
+        INSERT INTO roles_permissions(permission_id,role_id) VALUES
+        <foreach collection="pids" item="pid" separator=",">
+            (#{pid},#{rid})
+        </foreach>
+    </insert>
+
+    <insert id="addRoles" useGeneratedKeys="true" keyProperty="id" parameterType="com.admin.demo.entity.Role">
+        INSERT INTO role
+        <set>
+                name = #{name},
+                remark = #{remark},
+                data_scope = #{dataScope},
+                level = #{level},
+                create_time= #{createTime}
+        </set>
+    </insert>
+
+    <insert id="addDepts">
+        insert into roles_depts(role_id,dept_id) values
+<foreach collection="deptIds" item="dept_id" separator=",">
+    (#{rid},#{dept_id})
+</foreach>
+    </insert>
+
+    <delete id="delDeptByRid" parameterType="long">
+        DELETE FROM roles_depts WHERE role_id=#{rid}
+    </delete>
+
+<select id="findByRoles" resultType="com.admin.demo.entity.Role">
+    select level from role where id in
+    <foreach separator="," close=")" open="(" item="rids" collection="rids">
+        #{rids}
+    </foreach>
+</select>
+
+    <select id="getAll" resultType="com.admin.demo.entity.Role">
+        select name,id from role
+    </select>
+
+    <select id="findByRid" resultMap="LoadPermissions">
+        select * from role where id=#{rid}
+    </select>
+</mapper>

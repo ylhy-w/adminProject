@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.MenuMapper">
+
+    <select id="getMenus" resultType="Integer">
+       SELECT rm.menu_id FROM users_roles ur,roles_menus rm,menu m WHERE ur.role_id=rm.role_id AND ur.`user_id`=#{userId} order by m.sort
+    </select>
+<select id="buildTree" resultType="com.admin.demo.entity.Menu">
+    select * from menu where id  in
+    <foreach collection="array" item="ids" open="(" separator="," close=")">
+        #{ids}
+    </foreach>
+    order by sort
+</select>
+
+    <select id="findByPid" resultType="com.admin.demo.entity.Menu">
+        SELECT * from  menu where pid=#{id}
+    </select>
+
+    <select id="getAllMenus" resultType="Integer">
+        SELECT id from  menu order by sort
+    </select>
+    <select id="buildMenusTree" resultType="com.admin.demo.entity.Menu">
+        select * from menu where id  in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+        order by sort
+    </select>
+
+<!--    <select id="getAllMenu" resultMap="BaseResultMap">-->
+<!--        SELECT m.*,p.`name` AS pname,p.`alias`  FROM menu m  LEFT JOIN roles_menus rm ON m.`id`=rm.`menu_id` LEFT JOIN  roles_permissions rp ON rp.role_id=rm.role_id LEFT JOIN permission p ON p.id=rp.permission_id-->
+<!--   </select>-->
+<!--    <resultMap id="BaseResultMap" type="com.admin.demo.entity.Menu">-->
+<!--        <id column="id" property="id" jdbcType="INTEGER"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="DATE"/>-->
+<!--        <result column="path" property="path" jdbcType="VARCHAR"/>-->
+<!--        <result column="component" property="component" jdbcType="VARCHAR"/>-->
+<!--        <result column="name" property="name" jdbcType="VARCHAR"/>-->
+<!--        <result column="icon" property="icon" jdbcType="VARCHAR"/>-->
+<!--        <result column="sort" property="sort" jdbcType="INTEGER"/>-->
+<!--        <result column="pid" property="pid" jdbcType="INTEGER"/>-->
+<!--        <result column="i_frame" property="iFrame" jdbcType="BIT"/>-->
+<!--        <result column="enabled" property="enabled" jdbcType="BIT"/>-->
+<!--        <result column="url" property="url" jdbcType="VARCHAR"/>-->
+<!--        <collection property="permissions" ofType="com.admin.demo.entity.Permission" >-->
+<!--            <result column="pname" property="name"/>-->
+<!--            <result column="alias" property="alias"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    <select id="getMenuByPid" resultMap="BaseResultMap">-->
+<!--   select m.*  FROM menu m where m.`pid`=#{id} AND m.enabled=true;-->
+<!--    </select>-->
+
+</mapper>

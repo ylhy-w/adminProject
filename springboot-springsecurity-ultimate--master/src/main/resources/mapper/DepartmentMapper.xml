@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.DepartmentMapper">
+    <select id="findByRoleIds" resultType="com.admin.demo.entity.Department">
+        select d.* from department d,roles_depts rd where  rd.dept_Id=d.id AND rd.role_id= #{id}
+    </select>
+    <select id="findByPid" resultType="com.admin.demo.entity.Department">
+select * from department where pid =#{id}
+    </select>
+</mapper>
