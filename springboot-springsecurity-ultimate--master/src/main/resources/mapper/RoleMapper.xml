@@ -55,7 +55,7 @@ SELECT p.*  FROM roles_permissions rp,permission p,role r WHERE   rp.role_id=r.i
         </if>
     </select>
 
-    <select id="updateRoles" parameterType="com.admin.demo.entity.Role">
+    <update id="updateRoles" parameterType="com.admin.demo.entity.Role">
         update role
         <set>
             <if test="name != null ">
@@ -72,7 +72,7 @@ SELECT p.*  FROM roles_permissions rp,permission p,role r WHERE   rp.role_id=r.i
             </if>
         </set>
         where id = #{id}
-    </select>
+    </update>
 <select id="checkRelated" resultType="Integer">
     SELECT COUNT(*) FROM users_roles where `role_id`=#{rid}
 </select>

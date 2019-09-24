@@ -132,8 +132,8 @@
         <if test="name!=null">
             and u.username LIKE concat('%',#{name},'%')
         </if>
-        <if test="enabled !=null and enabled !='' ">
-            and u.enabled=#{enabled}
+        <if test="state !=null and state !='' and state=='open' ">
+            and u.enabled = #{enabled}
         </if>
       and u.deptId in
     <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
@@ -155,8 +155,8 @@
         <if test="name!=null">
             and u.username LIKE concat('%',#{name},'%')
         </if>
-        <if test="enabled !=null and enabled !='' ">
-            and u.enabled=#{enabled}
+        <if test="state !=null and state !='' and state=='open' ">
+            and u.enabled = #{enabled}
         </if>
     limit #{page},#{size}
 </select>
@@ -174,8 +174,8 @@
         <if test="name!=null">
             and u.username LIKE concat('%',#{name},'%')
         </if>
-        <if test="enabled !=null and enabled !='' ">
-            and u.enabled=#{enabled}
+        <if test="state !=null and state !='' and state=='open' ">
+            and u.enabled = #{enabled}
         </if>
         and u.deptId in
         <foreach collection="deptIds" item="deptIds" open="(" close=")" separator=",">
@@ -197,8 +197,8 @@
         <if test="name!=null">
             and u.username LIKE concat('%',#{name},'%')
         </if>
-        <if test="enabled !=null and enabled !='' ">
-            and u.enabled=#{enabled}
+        <if test="state !=null and state !='' and state=='open' ">
+            and u.enabled = #{enabled}
         </if>
     </select>
 

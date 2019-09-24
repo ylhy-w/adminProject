@@ -166,6 +166,7 @@ public class UserController {
                                    @RequestParam(defaultValue = "") String name,
                                    @RequestParam(defaultValue = "") String deptName,
                                   boolean enabled,
+                                   String state,
                                    Long deptId
                                   ){
         Set<Long> deptSet = new HashSet<>();
@@ -179,6 +180,7 @@ public class UserController {
         queryVo.setName(name);
         queryVo.setEnabled(enabled);
         queryVo.setDeptId(deptId);
+        queryVo.setState(state);
 
 
         if (!ObjectUtils.isEmpty(queryVo.getDeptId())) {

@@ -1,4 +1,115 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.admin.demo.mapper.PositionMapper">
+
+    <!-- deptIds 不为空-->
+<!-- mybatis会默认把enabled空值转为false。 -->
+    <select id="queryAll" resultType="com.admin.demo.entity.Position" parameterType="com.admin.demo.entity.QueryVo">
+        select * from position
+        <where>
+        <if test="name!=null">
+            and name LIKE concat('%',#{name},'%')
+        </if>
+
+            <if test="state !=null and state !='' and state=='open' ">
+                and enabled = #{enabled}
+            </if>
+
+        </where>
+        and deptId in
+        <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
+            #{deptIds}
+        </foreach>
+        limit #{page},#{size}
+    </select>
+
+    <!-- deptIds 为空-->
+    <select id="query" resultType="com.admin.demo.entity.Position" parameterType="com.admin.demo.entity.QueryVo">
+        select * from position
+        <where>
+            <if test="name!=null">
+                and name LIKE concat('%',#{name},'%')
+            </if>
+            <if test="state !=null and state !='' and state=='open' ">
+                and enabled = #{enabled}
+            </if>
+
+        </where>
+        limit #{page},#{size}
+    </select>
+
+    <select id="countAll" resultType="Integer" >
+        select count(*)  from position
+        <where>
+            <if test="name!=null">
+                and name LIKE concat('%',#{name},'%')
+            </if>
+            <if test="state !=null and state !='' and state=='open' ">
+                and enabled = #{enabled}
+            </if>
+        </where>
+        and deptId in
+        <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
+            #{deptIds}
+        </foreach>
+    </select>
+
+
+    <select id="count" resultType="Integer" >
+        select count(*) from position
+        <where>
+
+
+            <if test="name!=null">
+                and name LIKE concat('%',#{name},'%')
+            </if>
+            <if test="state !=null and state !='' and state=='open' ">
+                and enabled = #{enabled}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAll" resultType="com.admin.demo.entity.Position">
+        select * from position where enabled=true
+    </select>
+
+    <select id="findById" resultType="com.admin.demo.entity.Position">
+        select * from position where id = #{id}
+    </select>
+
+    <select id="check" resultType="Integer">
+        select count(*) from position where name=#{name}  and deptId=#{deptId}
+        <if test="id!=null and id!=''">
+            and id!= #{id}
+        </if>
+    </select>
+
+    <insert id="addPos" useGeneratedKeys="true" keyProperty="id">
+        insert into position (name,sort,deptId,enabled,create_time) values  (#{name},#{sort},#{deptId},#{enabled},now())
+    </insert>
+
+    <update id="updatePos">
+        update position
+        <set>
+            <if test="name != null ">
+                name = #{name},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="checkRelated" resultType="Integer">
+        select count(*) from user where posId=#{id}
+    </select>
+
+    <delete id="delPos">
+        delete from position where id =#{id}
+    </delete>
+
 </mapper>

@@ -10,10 +10,13 @@ import java.util.Set;
 public class QueryVo {
     private Long deptId;
     private String deptName;
-    private boolean enabled;
+    private Boolean enabled;
     private String name;
     private Integer page;
     private Integer size;
     private Set<Long> deptIds;
     private String keywords;
+
+    //辅助字段 开启enabled属性
+    private String state;
 }

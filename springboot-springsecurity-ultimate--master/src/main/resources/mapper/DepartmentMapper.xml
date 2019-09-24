@@ -16,9 +16,9 @@
         <if test="keywords !=null">
             name LIKE concat('%',#{keywords},'%')
         </if>
-            <if test="enabled !=null and enabled !='' ">
-                and enabled = #{enabled}
-            </if>
+                <if test="enabled !=null ">
+                    and enabled = #{enabled}
+                </if>
             </where>
     </select>
 
@@ -45,17 +45,17 @@
         SELECT COUNT(*) FROM user u,position p WHERE u.deptId=#{id}  OR p.deptId=#{id}
     </select>
 
-    <update id="updateDept">
+    <update id="updateDept" parameterType="com.admin.demo.entity.Department">
         update department
         <set>
-            <if test="name!=null">
-                name=#{name},
+            <if test="name != null">
+                name = #{name},
             </if>
-            <if test="enabled!=null">
-                enabled=#{enabled},
+            <if test="enabled != null ">
+                 enabled = #{enabled},
             </if>
-            <if test="pid!=null">
-                pid=#{pid}
+            <if test="pid != null">
+                pid = #{pid}
             </if>
         </set>
         where id =#{id}
