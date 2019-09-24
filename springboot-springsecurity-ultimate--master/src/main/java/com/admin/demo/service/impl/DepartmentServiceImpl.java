@@ -2,6 +2,7 @@ package com.admin.demo.service.impl;
 
 import com.admin.common.exception.BadRequestException;
 import com.admin.demo.entity.Department;
+import com.admin.demo.entity.QueryVo;
 import com.admin.demo.mapper.DepartmentMapper;
 import com.admin.demo.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,15 @@ public class DepartmentServiceImpl implements DepartmentService {
                         List<Department> departmentList = departmentMapper.findByPid(department.getId());
                         //            LinkedHashMap 按添加顺序保存数据
                         Map<String,Object> map = new LinkedHashMap<>();
-                        map.put("id",department.getId());
-                        map.put("label",department.getName());
-                        map.put("pid",department.getPid());
-                        if(departmentList!=null && departmentList.size()!=0){
-                            map.put("children",buildTree(departmentList));
-                        }
+                        if (department.getEnabled()) {
+                            map.put("id", department.getId());
+                            map.put("label", department.getName());
+                            map.put("pid", department.getPid());
+                            if (departmentList != null && departmentList.size() != 0) {
+                                map.put("children", buildTree(departmentList));
+                            }
                         list.add(map);
+                        }
                     }
                 }
         );
@@ -49,8 +52,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> query(String keywords, boolean enabled) {
-        return departmentMapper.query(keywords,enabled);
+    public List<Department> query(QueryVo queryVo) {
+        return departmentMapper.query(queryVo);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.admin.demo.mapper;
 
 import com.admin.demo.entity.Department;
+import com.admin.demo.entity.QueryVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface DepartmentMapper {
 
     List<Department> findByPid(Long id);
 
-    List<Department> query(@Param("keywords") String keywords,@Param("enabled") boolean enabled);
+    List<Department> query(QueryVo queryVo);
 
     Integer check(Department department);
 

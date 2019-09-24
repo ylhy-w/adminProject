@@ -2,6 +2,7 @@ package com.admin.demo.controller;
 
 import com.admin.common.utils.ServerResponse;
 import com.admin.demo.entity.Department;
+import com.admin.demo.entity.QueryVo;
 import com.admin.demo.service.DepartmentService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class DeptController {
     @PreAuthorize("hasAnyRole('ADMIN','DEPT_ALL','DEPT_SELECT')")
     @myLog(value="查询部门")
     @GetMapping("/getDept")
-    public ResponseEntity getDept(@RequestParam(defaultValue = "") String keywords,@RequestParam(defaultValue = "true") boolean enabled){
-        List<Department> departments = departmentService.query(keywords,enabled);
+    public ResponseEntity getDept(QueryVo queryVo){
+        List<Department> departments = departmentService.query(queryVo);
         return  ResponseEntity.ok(departmentService.getDept(departments));
     }
 

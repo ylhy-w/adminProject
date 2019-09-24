@@ -11,7 +11,15 @@
     </select>
 
     <select id="query"  resultType="com.admin.demo.entity.Department">
-        select * from department where name LIKE concat('%',#{keywords},'%') and enabled = #{enabled}
+        select * from department
+            <where>
+        <if test="keywords !=null">
+            name LIKE concat('%',#{keywords},'%')
+        </if>
+            <if test="enabled !=null and enabled !='' ">
+                and enabled = #{enabled}
+            </if>
+            </where>
     </select>
 
     <select id="check"  resultType="Integer">

@@ -126,9 +126,15 @@
     <if test="deptId!=null">
       and u.`deptId`=#{deptId}
       </if>
-    and d.name LIKE concat('%',#{deptName},'%')
-      and u.username LIKE concat('%',#{name},'%')
-      and u.enabled=#{enabled}
+        <if test="deptName!=null">
+            and d.name LIKE concat('%',#{deptName},'%')
+        </if>
+        <if test="name!=null">
+            and u.username LIKE concat('%',#{name},'%')
+        </if>
+        <if test="enabled !=null and enabled !='' ">
+            and u.enabled=#{enabled}
+        </if>
       and u.deptId in
     <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
           #{deptIds}
@@ -143,9 +149,15 @@
     <if test="deptId!=null">
         and u.`deptId`= #{deptId}
     </if>
-    and d.name LIKE concat('%',#{deptName},'%')
-    and u.username LIKE concat('%',#{name},'%')
-    and u.enabled=#{enabled}
+        <if test="deptName!=null">
+            and d.name LIKE concat('%',#{deptName},'%')
+        </if>
+        <if test="name!=null">
+            and u.username LIKE concat('%',#{name},'%')
+        </if>
+        <if test="enabled !=null and enabled !='' ">
+            and u.enabled=#{enabled}
+        </if>
     limit #{page},#{size}
 </select>
 
@@ -156,9 +168,15 @@
         <if test="deptId!=null">
             and u.`deptId`=#{deptId}
         </if>
-        and  d.name LIKE concat('%',#{deptName},'%')
-        and  u.username LIKE concat('%',#{name},'%')
-        and u.enabled=#{enabled}
+        <if test="deptName!=null">
+            and d.name LIKE concat('%',#{deptName},'%')
+        </if>
+        <if test="name!=null">
+            and u.username LIKE concat('%',#{name},'%')
+        </if>
+        <if test="enabled !=null and enabled !='' ">
+            and u.enabled=#{enabled}
+        </if>
         and u.deptId in
         <foreach collection="deptIds" item="deptIds" open="(" close=")" separator=",">
             #{deptIds}
@@ -173,9 +191,15 @@
         <if test="deptId!=null">
             and u.`deptId`=#{deptId}
         </if>
-        and  d.name LIKE concat('%',#{deptName},'%')
-        and  u.username LIKE concat('%',#{name},'%')
-        and u.enabled=#{enabled}
+        <if test="deptName!=null">
+            and d.name LIKE concat('%',#{deptName},'%')
+        </if>
+        <if test="name!=null">
+            and u.username LIKE concat('%',#{name},'%')
+        </if>
+        <if test="enabled !=null and enabled !='' ">
+            and u.enabled=#{enabled}
+        </if>
     </select>
 
     <select id="findByAccount" resultType="com.admin.demo.entity.User">

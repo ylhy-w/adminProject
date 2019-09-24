@@ -165,7 +165,7 @@ public class UserController {
                                    @RequestParam(defaultValue = "10") Integer size,
                                    @RequestParam(defaultValue = "") String name,
                                    @RequestParam(defaultValue = "") String deptName,
-                                   @RequestParam(defaultValue = "true") boolean enabled,
+                                  boolean enabled,
                                    Long deptId
                                   ){
         Set<Long> deptSet = new HashSet<>();
