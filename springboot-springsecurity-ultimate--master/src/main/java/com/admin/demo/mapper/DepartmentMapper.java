@@ -26,4 +26,5 @@ public interface DepartmentMapper {
 
     void updateDept(Department department);
 
+    Department findById(Long id);
 }

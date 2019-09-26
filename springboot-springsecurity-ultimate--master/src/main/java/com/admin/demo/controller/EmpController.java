@@ -1,12 +1,10 @@
 package com.admin.demo.controller;
 
-import com.admin.common.utils.ServerResponse;
 import com.admin.demo.entity.Employee;
 import com.admin.demo.service.EmpService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +22,7 @@ public class EmpController {
     @Autowired
     EmpService empService;
 
-  @PreAuthorize("hasAnyAuthority('USER_SELECT','ADMIN')")
+ // @PreAuthorize("hasAnyAuthority('USER_SELECT','ADMIN')")
     @myLog(value = "查询员工信息")
     @GetMapping("/get")
                 public ResponseEntity getEmps(@RequestParam(defaultValue = "1") Integer page,

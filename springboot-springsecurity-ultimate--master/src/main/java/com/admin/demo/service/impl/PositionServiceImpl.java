@@ -1,14 +1,17 @@
 package com.admin.demo.service.impl;
 
 import com.admin.common.exception.BadRequestException;
+import com.admin.demo.entity.Department;
 import com.admin.demo.entity.Position;
 import com.admin.demo.entity.QueryVo;
+import com.admin.demo.mapper.DepartmentMapper;
 import com.admin.demo.mapper.PositionMapper;
 import com.admin.demo.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +22,24 @@ public class PositionServiceImpl implements PositionService {
 
     @Autowired
     PositionMapper positionMapper;
+    @Autowired
+    DepartmentMapper departmentMapper;
 
     @Override
     public Object queryAll(QueryVo queryVo) {
         Map<String,Object> map = new HashMap<>();
         if (queryVo.getDeptIds().size()==0){
             List<Position> posList = positionMapper.query(queryVo);
+            List<Position> positions = new ArrayList<>();
+            for (Position position:posList){
+                if (position.getDept().getPid()!=0){
+                    Department department=departmentMapper.findById(position.getDept().getPid());
+                    position.setSuperDeptName(department.getName());
+                }
+                positions.add(position);
+            }
             Integer total =positionMapper.count(queryVo);
-            map.put("posList",posList);
+            map.put("posList",positions);
             map.put("total",total);
             return map;
         }

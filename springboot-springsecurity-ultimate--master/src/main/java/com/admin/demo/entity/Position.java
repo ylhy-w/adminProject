@@ -13,12 +13,15 @@ public class Position {
 
     private String name;
 
+    private String superDeptName;
+
     private Long sort;
 
     private Boolean enabled;
 
     private Long deptId;
 
+    private Department dept;
 
     private Timestamp createTime;
 }

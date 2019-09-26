@@ -60,5 +60,7 @@
         </set>
         where id =#{id}
     </update>
-
+<select id="findById" resultType="com.admin.demo.entity.Department">
+    SELECT * FROM department WHERE id =#{id}
+</select>
 </mapper>

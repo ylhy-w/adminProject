@@ -2,21 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.admin.demo.mapper.PositionMapper">
 
+    <resultMap id="pos" type="com.admin.demo.entity.Position">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="sort" property="sort"/>
+        <result column="enabled" property="enabled"/>
+        <result column="deptId" property="deptId"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="dept" ofType="com.admin.demo.entity.Department">
+            <id property="id" column="deptId" />
+            <result property="name" column="dname"/>
+            <result property="pid" column="pid"/>
+        </collection>
+    </resultMap>
     <!-- deptIds 不为空-->
 <!-- mybatis会默认把enabled空值转为false。 -->
-    <select id="queryAll" resultType="com.admin.demo.entity.Position" parameterType="com.admin.demo.entity.QueryVo">
-        select * from position
+    <select id="queryAll" resultMap="pos" parameterType="com.admin.demo.entity.QueryVo">
+        select d.name as dname,d.pid,p.* from position p left join department d on p.deptId=d.id
         <where>
         <if test="name!=null">
-            and name LIKE concat('%',#{name},'%')
+            and p.name LIKE concat('%',#{name},'%')
         </if>
 
             <if test="state !=null and state !='' and state=='open' ">
-                and enabled = #{enabled}
+                and p.enabled = #{enabled}
             </if>
 
         </where>
-        and deptId in
+        and p.deptId in
         <foreach separator="," close=")" open="(" item="deptIds" collection="deptIds">
             #{deptIds}
         </foreach>
@@ -24,14 +37,14 @@
     </select>
 
     <!-- deptIds 为空-->
-    <select id="query" resultType="com.admin.demo.entity.Position" parameterType="com.admin.demo.entity.QueryVo">
-        select * from position
+    <select id="query" resultMap="pos" parameterType="com.admin.demo.entity.QueryVo">
+        select d.name as dname,d.pid,p.* from position p left join department d on p.deptId=d.id
         <where>
             <if test="name!=null">
-                and name LIKE concat('%',#{name},'%')
+                and p.name LIKE concat('%',#{name},'%')
             </if>
             <if test="state !=null and state !='' and state=='open' ">
-                and enabled = #{enabled}
+                and p.enabled = #{enabled}
             </if>
 
         </where>
@@ -98,7 +111,10 @@
                 sort = #{sort},
             </if>
             <if test="enabled != null">
-                enabled = #{enabled}
+                enabled = #{enabled},
+            </if>
+            <if test="deptId != null">
+                deptId = #{deptId}
             </if>
         </set>
         where id = #{id}

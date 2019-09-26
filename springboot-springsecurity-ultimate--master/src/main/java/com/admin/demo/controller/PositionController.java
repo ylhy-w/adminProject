@@ -63,7 +63,7 @@ public class PositionController {
     @DeleteMapping(value = "/delPos/{id}")
     public ServerResponse delPos(@PathVariable Long id){
         positionService.delPos(id);
-        return ServerResponse.createBySuccess("删除成功");
+        return ServerResponse.createBySuccessMessage("删除成功");
     }
 
 
