@@ -23,4 +23,6 @@ public interface PermissionMapper {
     void delRolePermission(Long id);
 
     void updatePermission(Permission permission);
+
+    Permission findById(Long id);
 }

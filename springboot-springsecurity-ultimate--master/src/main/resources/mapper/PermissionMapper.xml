@@ -63,4 +63,8 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="findById" resultType="com.admin.demo.entity.Permission">
+        select * from permission where id=#{id}
+    </select>
 </mapper>

@@ -86,6 +86,10 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void delPermission(Long id) {
+        Permission per =permissionMapper.findById(id);
+        if (per.getName().equals("ADMIN")){
+            throw new BadRequestException("不可改动超级管理员信息");
+        }
         List<Permission> permissionList=permissionMapper.findByPid(id);
         if (permissionList!=null) {
             for (Permission permission : permissionList) {
@@ -100,6 +104,11 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void updatePermission(Permission permission) {
+        Permission per =permissionMapper.findById(permission.getId());
+        if (per.getName().equals("ADMIN")){
+            throw new BadRequestException("不可改动超级管理员信息");
+        }
+
         if (permissionMapper.check(permission)>0){
             throw new BadRequestException("该权限已存在");
         }

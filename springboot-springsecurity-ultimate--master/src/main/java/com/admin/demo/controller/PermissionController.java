@@ -46,6 +46,7 @@ public class PermissionController {
         if (permission.getName()==null||permission.getAlias()==null){
             throw new BadRequestException("权限名称或别名为空");
         }
+
         permissionService.addPermission(permission);
 
         return ServerResponse.createBySuccessMessage("添加成功");
@@ -55,6 +56,7 @@ public class PermissionController {
     @myLog(value="删除权限")
     @DeleteMapping("/delPermission/{id}")
     public ServerResponse delPermission(@PathVariable Long id){
+
             permissionService.delPermission(id);
         return ServerResponse.createBySuccessMessage("删除成功");
     }

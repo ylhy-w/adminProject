@@ -18,4 +18,5 @@ public interface PermissionService {
     void delPermission(Long id);
 
     void updatePermission(Permission permission);
+
 }
