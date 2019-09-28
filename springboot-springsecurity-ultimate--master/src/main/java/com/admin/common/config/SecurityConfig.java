@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forgetPwd").anonymous()
                 .antMatchers("/reset_password").anonymous()
                 .antMatchers("/emailActive").anonymous()
-
+                .antMatchers("/druid/**").anonymous()
 
                 // 所有请求都需要认证
                 .anyRequest().authenticated();

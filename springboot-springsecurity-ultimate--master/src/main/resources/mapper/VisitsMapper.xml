@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.VisitsMapper">
+    <select id="findByDate" resultType="com.admin.demo.entity.Visits">
+        select * FROM visits where date=#{date}
+    </select>
+
+    <select id="findAllVisits" resultType="com.admin.demo.entity.Visits">
+        select * FROM visits where create_time between #{date1} and #{date2}
+    </select>
+
+
+
+<update id="update" parameterType="com.admin.demo.entity.Visits">
+    update visits
+    <set>
+        <if test="ipCounts != null and ipCounts != '' ">
+            ip_counts =  #{ipCounts},
+        </if>
+        <if test="pvCounts != null and pvCounts != '' ">
+            pv_counts = #{pvCounts}
+        </if>
+    </set>
+    where date = #{date}
+</update>
+</mapper>

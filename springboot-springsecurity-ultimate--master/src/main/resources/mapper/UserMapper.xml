@@ -22,6 +22,9 @@
             <result property="name" column="pname"/>
             <result property="deptId" column="deptId"/>
         </collection>
+        <collection property="roles" ofType="com.admin.demo.entity.Role" select="com.admin.demo.mapper.UserMapper.getRolesById"
+                    column="id">
+        </collection>
     </resultMap>
 
 
@@ -30,9 +33,7 @@
         <collection property="permissions" ofType="com.admin.demo.entity.Permission" select="com.admin.demo.mapper.UserMapper.getPermissionById"
                     column="id" >
         </collection>
-        <collection property="roles" ofType="com.admin.demo.entity.Role" select="com.admin.demo.mapper.UserMapper.getRolesById"
-                    column="id">
-        </collection>
+
     </resultMap>
 
     <select id="getPermissionById" resultType="com.admin.demo.entity.Permission" >

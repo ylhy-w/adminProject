@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.demo.mapper.ScheduledMapper">
+    <update id="resetAllLock">
+        update password_attempts
+        set attempts=0
+    </update>
+
+    <insert id="save">
+        insert into visits (create_time,date,ip_counts,pv_counts,week_day) values (now(),#{date},#{ipCounts},#{pvCounts},#{weekDay})
+    </insert>
+
+</mapper>
