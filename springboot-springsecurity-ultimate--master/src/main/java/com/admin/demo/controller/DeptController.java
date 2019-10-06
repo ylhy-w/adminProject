@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("dept")
+@RequestMapping("api/dept")
 public class DeptController {
     @Autowired
     DepartmentService departmentService;

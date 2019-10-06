@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 2018-11-24
  */
 @RestController
-@RequestMapping("logs")
+@RequestMapping("api/logs")
 public class LogController {
 
     @Autowired

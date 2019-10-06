@@ -10,13 +10,13 @@
             select * from department where pid =#{id}
     </select>
 
-    <select id="query"  resultType="com.admin.demo.entity.Department">
+    <select id="query"  resultType="com.admin.demo.entity.Department" parameterType="com.admin.demo.entity.QueryVo">
         select * from department
             <where>
         <if test="keywords !=null">
             name LIKE concat('%',#{keywords},'%')
         </if>
-                <if test="enabled !=null ">
+                <if test="state !=null and state !='' and state=='open' ">
                     and enabled = #{enabled}
                 </if>
             </where>

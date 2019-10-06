@@ -31,7 +31,7 @@ public class PictureServiceImpl implements PictureService {
 
     public static final String CODE = "code";
 
-    public static final String MSG = "msg";
+    public static final String MSG = "message";
 
     public static final String URL = "https://sm.ms/api/upload";
 
@@ -46,6 +46,7 @@ public class PictureServiceImpl implements PictureService {
         String result= HttpUtil.post(URL, paramMap);
         JSONObject jsonObject = JSONUtil.parseObj(result);
         Picture picture = null;
+        System.out.println(jsonObject.toString());
         if(!jsonObject.get(CODE).toString().equals(SUCCESS)){
             throw new BadRequestException(jsonObject.get(MSG).toString());
         }
@@ -90,5 +91,12 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public Integer getCount(String keywords) {
         return pictureMapper.getCount(keywords);
+    }
+
+    @Override
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
+            delete(findById(id));
+        }
     }
 }

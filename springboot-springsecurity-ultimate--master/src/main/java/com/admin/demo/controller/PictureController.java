@@ -10,7 +10,9 @@ import com.admin.demo.service.PictureService;
 import com.admin.demo.service.UserService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-@RequestMapping("picture")
+@RequestMapping("api/picture")
 @RestController
 public class PictureController {
     @Autowired
@@ -35,6 +37,7 @@ public class PictureController {
 
     @myLog("查询图片")
     @GetMapping(value = "/get")
+    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_SELECT')")
     public ResponseEntity getRoles(@RequestParam(defaultValue = "1") Integer page,
                                    @RequestParam(defaultValue = "10") Integer size,
                                    @RequestParam(defaultValue = "") String keywords){
@@ -50,11 +53,11 @@ public class PictureController {
 
     @myLog("上传图片")
     @PostMapping("/upload")
+    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_UPLOAD')")
     public ServerResponse upload(@RequestParam MultipartFile file){
                 if (file.getSize()>maxSize){
          throw new BadRequestException("单张图片大小不能超过5M");
         }
-        System.out.println(file.getSize());
         String userName = SecurityUtils.getUsername();
         Picture picture = pictureService.upload(file,userName);
         Map map = new HashMap(2);
@@ -65,10 +68,25 @@ public class PictureController {
 
     @myLog("删除图片")
     @DeleteMapping(value = "/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
     public ServerResponse delete(@PathVariable Long id) {
         pictureService.delete(pictureService.findById(id));
         return  ServerResponse.createBySuccessMessage("删除成功");
     }
+
+    /**
+     * 删除多张图片
+     * @param ids
+     * @return
+     */
+    @myLog("批量删除图片")
+    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
+    @DeleteMapping(value = "/deleteAll")
+    public ServerResponse deleteAll( Long[] ids) {
+        pictureService.deleteAll(ids);
+        return  ServerResponse.createBySuccessMessage("删除成功");
+    }
+
 
 //上传头像
     @PostMapping("/user")

@@ -15,4 +15,6 @@ public interface PictureService {
     List<Picture> getPictures(int start, Integer size, String keywords);
 
     Integer getCount(String keywords);
+
+    void deleteAll(Long[] ids);
 }

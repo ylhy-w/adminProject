@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+@RequestMapping("api")
 @RestController
 public class EmailController {
     @Autowired
@@ -65,6 +68,5 @@ public class EmailController {
         String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
         emailService.findPassowrd(basePath,user);
         return ServerResponse.createBySuccessMessage("重置密码邮件已成功发送至账号绑定的邮箱，请注意查收");
-
     }
 }

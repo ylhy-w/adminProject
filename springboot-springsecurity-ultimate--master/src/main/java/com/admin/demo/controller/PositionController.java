@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("pos")
+@RequestMapping("api/pos")
 public class PositionController {
 
     @Autowired

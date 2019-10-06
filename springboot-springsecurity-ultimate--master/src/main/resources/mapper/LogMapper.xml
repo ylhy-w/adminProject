@@ -32,6 +32,6 @@
     </select>
 
     <select id="findIp" resultType="Long">
-        SELECT COUNT(*) FROM (SELECT request_ip FROM LOG WHERE create_time BETWEEN #{date1} AND #{date2} GROUP BY request_ip) AS s
+        select count(*) from (select request_ip from log where create_time between #{date1} and #{date2} group by request_ip) as s
     </select>
 </mapper>

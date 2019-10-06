@@ -14,24 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Zheng Jie
  * @date 2018-12-13
  */
+@RequestMapping("api/visits")
 @RestController
 public class VisitsController {
 
     @Autowired
     private VisitsService visitsService;
 
-    @PostMapping(value = "/visits")
+    @PostMapping()
     public ResponseEntity create(){
         visitsService.count(RequestHolder.getHttpServletRequest());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/visits")
+    @GetMapping()
     public ResponseEntity get(){
         return new ResponseEntity(visitsService.get(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/visits/chartData")
+    @GetMapping(value = "/chartData")
     public ResponseEntity getChartData(){
         return new ResponseEntity(visitsService.getChartData(), HttpStatus.OK);
     }

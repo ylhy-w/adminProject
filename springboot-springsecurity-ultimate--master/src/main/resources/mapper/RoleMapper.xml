@@ -139,4 +139,8 @@ SELECT p.*  FROM roles_permissions rp,permission p,role r WHERE   rp.role_id=r.i
     <select id="findByRid" resultMap="LoadPermissions">
         select * from role where id=#{rid}
     </select>
+
+
+
+
 </mapper>

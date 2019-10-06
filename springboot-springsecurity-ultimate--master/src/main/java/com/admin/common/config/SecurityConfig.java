@@ -93,16 +93,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/*.html",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js"
+                        "/**/*.js",
+                        "/**/*.ico"
                 ).anonymous()
 
 
               .antMatchers( HttpMethod.POST,"/auth/"+loginPath).anonymous()
-                .antMatchers( "/register").anonymous()
-                .antMatchers("/forgetPwd").anonymous()
-                .antMatchers("/reset_password").anonymous()
-                .antMatchers("/emailActive").anonymous()
-                .antMatchers("/druid/**").anonymous()
+                .antMatchers( "/api/register").anonymous()
+                .antMatchers("/api/forgetPwd").anonymous()
+                .antMatchers("/api/reset_password").anonymous()
+                .antMatchers("/api/emailActive").anonymous()
+                .antMatchers("/api/druid/**").anonymous()
+                .antMatchers(HttpMethod.OPTIONS, "/**").anonymous()
 
                 // 所有请求都需要认证
                 .anyRequest().authenticated();

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("role")
+@RequestMapping("api/role")
 @RestController
 public class RoleController {
     @Autowired
