@@ -29,6 +29,7 @@ spring:
     port: 6379
     password: 996211
 
+
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -81,4 +82,3 @@ jwt:
     path: /login
     # 获取用户信息
     account: /details
-

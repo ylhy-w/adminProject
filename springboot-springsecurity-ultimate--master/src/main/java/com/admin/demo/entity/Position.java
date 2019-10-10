@@ -24,4 +24,18 @@ public class Position {
     private Department dept;
 
     private Timestamp createTime;
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", superDeptName='" + superDeptName + '\'' +
+                ", sort=" + sort +
+                ", enabled=" + enabled +
+                ", deptId=" + deptId +
+                ", dept=" + dept +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

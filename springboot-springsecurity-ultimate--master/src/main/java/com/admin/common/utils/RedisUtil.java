@@ -59,6 +59,9 @@ public class RedisUtil {
     }
 
 
+    public void flushdb() {
+        redisTemplate.getConnectionFactory().getConnection().flushDb();
+    }
 
     // =============================common============================
     /**

@@ -19,4 +19,22 @@ public class Employee {
     private String posName;
     private String beginDate;
     private String workID;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", sex='" + sex + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                ", posId=" + posId +
+                ", posName='" + posName + '\'' +
+                ", beginDate='" + beginDate + '\'' +
+                ", workID='" + workID + '\'' +
+                '}';
+    }
 }

@@ -8,6 +8,10 @@ import com.admin.demo.mapper.DepartmentMapper;
 import com.admin.demo.mapper.PositionMapper;
 import com.admin.demo.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +22,7 @@ import java.util.Map;
 
 @Transactional
 @Service
+@CacheConfig(cacheNames = "permission")
 public class PositionServiceImpl implements PositionService {
 
     @Autowired
@@ -26,6 +31,7 @@ public class PositionServiceImpl implements PositionService {
     DepartmentMapper departmentMapper;
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
     public Object queryAll(QueryVo queryVo) {
         Map<String,Object> map = new HashMap<>();
         if (queryVo.getDeptIds().size()==0){
@@ -50,18 +56,25 @@ public class PositionServiceImpl implements PositionService {
         map.put("total",total);
         return map ;
     }
-
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
     @Override
     public List<Position> getAll() {
         return positionMapper.getAll();
     }
 
+
+    @Cacheable(key = "#p0",unless="#result == null")
     @Override
     public List<Position> findById(Long id) {
         return positionMapper.findById(id);
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "pos",allEntries=true),
+            }
+    )
     public void addPos(Position position) {
         Integer i = positionMapper.check(position);
         if (i>0){
@@ -71,6 +84,11 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "pos",allEntries=true),
+            }
+    )
     public void updatePos(Position position) {
         Integer i = positionMapper.check(position);
         if (i>0){
@@ -80,6 +98,11 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "pos",allEntries=true),
+            }
+    )
     public void delPos(Long id) {
         Integer i = positionMapper.checkRelated(id);
         if (i>0){

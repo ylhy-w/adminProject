@@ -9,6 +9,10 @@ import com.admin.demo.mapper.UserMapper;
 import com.admin.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -155,6 +159,7 @@ if (queryVo.getDeptIds().size()==0){
 
         userMapper.delUser(id);
     }
+
 
     public User findById(Long id) {
         return userMapper.findById(id);

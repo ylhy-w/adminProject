@@ -44,5 +44,20 @@ public class Menu implements Serializable {
 
     private List<Menu> children;
 
-
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", sort=" + sort +
+                ", path='" + path + '\'' +
+                ", component='" + component + '\'' +
+                ", icon='" + icon + '\'' +
+                ", pid=" + pid +
+                ", iFrame=" + iFrame +
+                ", createTime=" + createTime +
+                ", enabled=" + enabled +
+                ", children=" + children +
+                '}';
+    }
 }

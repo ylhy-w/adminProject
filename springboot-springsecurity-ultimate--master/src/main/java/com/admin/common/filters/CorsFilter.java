@@ -19,7 +19,8 @@ public class CorsFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "http://ylhy.online:8090");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,x-requested-with,Authorization");
+        response.setHeader("Access-Control-Allow-Headers", "content-type,x-requested-with,Authorization");
+    //    response.setHeader("X-Content-Type-Options", "nosniff");
    //     System.out.println("*********************************过滤器被使用**************************");
         chain.doFilter(req, res);
     }

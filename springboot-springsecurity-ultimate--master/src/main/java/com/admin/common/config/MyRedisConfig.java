@@ -18,6 +18,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
+
 @Configuration
 public class MyRedisConfig {
 
@@ -70,4 +71,6 @@ public class MyRedisConfig {
         return cacheManager;
 
     }
+
+
 }

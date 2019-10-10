@@ -4,6 +4,8 @@ import com.admin.demo.entity.Employee;
 import com.admin.demo.service.EmpService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/emp")
+
 public class EmpController {
 
 
@@ -25,6 +28,7 @@ public class EmpController {
  // @PreAuthorize("hasAnyAuthority('USER_SELECT','ADMIN')")
     @myLog(value = "查询员工信息")
     @GetMapping("/get")
+
                 public ResponseEntity getEmps(@RequestParam(defaultValue = "1") Integer page,
     @RequestParam(defaultValue = "10") Integer size,
     @RequestParam(defaultValue = "") String keywords,

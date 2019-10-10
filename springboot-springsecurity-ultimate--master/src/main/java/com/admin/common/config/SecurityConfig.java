@@ -74,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity
 
                 // 禁用 CSRF
@@ -94,7 +93,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/**/*.ico"
+                        "/**/*.ico",
+                        "/**/*.jpg",
+                        "/**/*.png"
                 ).anonymous()
 
 

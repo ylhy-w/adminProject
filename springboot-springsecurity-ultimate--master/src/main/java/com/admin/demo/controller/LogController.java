@@ -24,35 +24,39 @@ public class LogController {
 
     @Autowired
     private LogService logService;
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','LOG_ALL','LOGINFO_SELECT')")
     @GetMapping("/info")
     public ResponseEntity getLogs(@RequestParam(defaultValue = "1") int page,
-                                  @RequestParam(defaultValue = "10") int size){
+                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "") String keywords){
         int start= (page-1)*size;
         Map<String,Object> map=new HashMap<>(2);
         String type = "INFO";
-        List<Log> logs = logService.getLogs(type,start,size);
-        Integer count = logService.getLogsCount(type);
+        List<Log> logs = logService.getLogs(type,start,size,keywords);
+        Integer count = logService.getLogsCount(type,keywords);
         map.put("logs",logs);
         map.put("count",count);
         return   ResponseEntity.ok(map);
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','LOG_ALL','LOGERROR_SELECT')")
     @GetMapping("/error")
     public ResponseEntity getErrorLogs(@RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "10") int size){
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "") String keywords){
         int start= (page-1)*size;
         String type = "ERROR";
         Map<String, Object> map = new HashMap<>(2);
-        List<Log> logs = logService.getLogs(type,start,size);
-        Integer count = logService.getLogsCount(type);
+        List<Log> logs = logService.getLogs(type,start,size,keywords);
+        Integer count = logService.getLogsCount(type,keywords);
         map.put("logs",logs);
         map.put("count",count);
         return   ResponseEntity.ok(map);
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','LOG_ALL','LOGERROR_SELECT')")
     @GetMapping("/error/{id}")
     public ResponseEntity getErrorLogsById(@PathVariable Long id){
         Map<String,Object> map=new HashMap<>(1);

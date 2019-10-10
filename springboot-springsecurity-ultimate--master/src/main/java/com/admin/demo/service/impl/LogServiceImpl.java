@@ -1,6 +1,6 @@
 package com.admin.demo.service.impl;
 
-import cn.hutool.core.lang.Dict;
+
 import cn.hutool.json.JSONObject;
 import com.admin.common.utils.StringUtils;
 import com.admin.demo.entity.Log;
@@ -13,6 +13,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.List;
  * @date 2018-11-24
  */
 @Service
+@CacheConfig(cacheNames = "logs")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class LogServiceImpl implements LogService {
 
@@ -86,13 +89,13 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public List<Log> getLogs(String type,int start, int size) {
-        return logMapper.getLogs(type,start,size);
+    public List<Log> getLogs(String type,int start, int size,String keywords) {
+        return logMapper.getLogs(type,start,size,keywords);
     }
 
     @Override
-    public Integer getLogsCount(String type) {
-        return logMapper.getLogsCount(type);
+    public Integer getLogsCount(String type,String keywords) {
+        return logMapper.getLogsCount(type,keywords);
     }
 
     @Override
@@ -100,6 +103,7 @@ public class LogServiceImpl implements LogService {
         return logMapper.getUserLogsCount(username);
     }
 
+    @Cacheable(key = "#p0",unless="#result == null")
     @Override
     public String getErrorDetail(Long id) {
         return logMapper.getErrorDetail(id);

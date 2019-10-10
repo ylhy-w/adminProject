@@ -4,6 +4,8 @@ import com.admin.demo.entity.Menu;
 import com.admin.demo.mapper.MenuMapper;
 import com.admin.demo.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,11 +13,13 @@ import java.util.*;
 
 @Transactional
 @Service
+@CacheConfig(cacheNames = "menu")
 public class MenuServiceImpl  implements MenuService {
     @Autowired
     MenuMapper menuMapper;
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     public List<Menu> buildTree(Long userId)
     {
         Integer[] ids=menuMapper.getMenus(userId);
@@ -42,6 +46,7 @@ return trees;
 
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     public Object menusTree(List<Menu> menus) {
 
         List<Map<String,Object>> list = new LinkedList<>();
@@ -63,6 +68,7 @@ return trees;
     }
 
     @Override
+    @Cacheable(key = "#p0")
     public List<Menu> findByPid(long l) {
         return menuMapper.findByPid(l);
     }

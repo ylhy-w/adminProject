@@ -5,6 +5,10 @@ import com.admin.demo.entity.Permission;
 import com.admin.demo.mapper.PermissionMapper;
 import com.admin.demo.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +16,7 @@ import java.util.*;
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = "permission")
 public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
@@ -19,6 +24,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     //权限树
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     public Object buildTree(List<Permission> permissions) {
         List<Map<String,Object>> list = new LinkedList<>();
         permissions.forEach(permission -> {
@@ -39,11 +45,13 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
     public List<Permission> findByPid(long l) {
         return permissionMapper.findByPid(l);
     }
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     public Object getPermission(List<Permission> permissions) {
 
         List<Permission> trees = new ArrayList<Permission>();
@@ -68,11 +76,17 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
     public List<Permission> findByKeywords(String keywords) {
         return permissionMapper.findByKeywords(keywords);
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "permission",allEntries=true),
+            }
+    )
     public void addPermission(Permission permission) {
 
             if (permissionMapper.check(permission)>0){
@@ -85,6 +99,11 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "permission",allEntries=true),
+            }
+    )
     public void delPermission(Long id) {
         Permission per =permissionMapper.findById(id);
         if (per.getName().equals("ADMIN")){
@@ -103,6 +122,11 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "permission",allEntries=true),
+            }
+    )
     public void updatePermission(Permission permission) {
         Permission per =permissionMapper.findById(permission.getId());
         if (per.getName().equals("ADMIN")){

@@ -9,12 +9,12 @@
     </insert>
 
     <select id="getLogs" resultType="com.admin.demo.entity.Log">
-    select  id,create_time,time,username,description,log_type,method,params,request_ip,address from log where log_type = #{logType} order by create_time desc
+    select  id,create_time,time,username,description,log_type,method,params,request_ip,address from log where log_type = #{logType} and description LIKE concat('%',#{keywords},'%') order by create_time desc
    limit #{start},#{size}
 
 </select>
     <select id="getLogsCount" resultType="Integer">
-        select  count(*) from log where log_type = #{logType}
+        select  count(*) from log where log_type = #{logType} and description LIKE concat('%',#{keywords},'%')
     </select>
 
     <select id="getErrorDetail" resultType="string">

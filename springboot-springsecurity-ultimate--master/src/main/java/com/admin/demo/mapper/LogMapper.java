@@ -18,13 +18,13 @@ public interface LogMapper {
 
     void save(Log log);
 
-    List<Log> getLogs(@Param("logType")String type,@Param("start")  int start, @Param("size") int size);
+    List<Log> getLogs(@Param("logType")String type,@Param("start")  int start, @Param("size") int size, @Param("keywords") String keywords);
 
     String getErrorDetail(Long id);
 
     List<Log> getUserLogs(@Param("username") String username,@Param("start")  int start, @Param("size") int size);
 
-    Integer getLogsCount(String type);
+    Integer getLogsCount(@Param("logType")String type, @Param("keywords") String keywords);
 
     Integer getUserLogsCount(String username);
 }

@@ -82,7 +82,7 @@ public class PictureController {
     @myLog("批量删除图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
     @DeleteMapping(value = "/deleteAll")
-    public ServerResponse deleteAll( Long[] ids) {
+    public ServerResponse deleteAll(@RequestBody Long[] ids) {
         pictureService.deleteAll(ids);
         return  ServerResponse.createBySuccessMessage("删除成功");
     }

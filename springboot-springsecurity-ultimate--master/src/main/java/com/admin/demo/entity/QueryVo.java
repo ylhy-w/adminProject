@@ -19,4 +19,19 @@ public class QueryVo {
 
     //辅助字段 开启enabled属性
     private String state;
+
+    @Override
+    public String toString() {
+        return "QueryVo{" +
+                "deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                ", enabled=" + enabled +
+                ", name='" + name + '\'' +
+                ", page=" + page +
+                ", size=" + size +
+                ", deptIds=" + deptIds +
+                ", keywords='" + keywords + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

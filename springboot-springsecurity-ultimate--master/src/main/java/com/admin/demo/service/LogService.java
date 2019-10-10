@@ -31,9 +31,9 @@ public interface LogService {
 
     List<Log> getUserLogs(String username, int start, int size);
 
-    List<Log> getLogs(String type, int start, int size);
+    List<Log> getLogs(String type, int start, int size,String keywords);
 
-    Integer getLogsCount(String type);
+    Integer getLogsCount(String type,String  keywords);
 
     Integer getUserLogsCount(String username);
 }

@@ -6,6 +6,10 @@ import com.admin.demo.entity.QueryVo;
 import com.admin.demo.mapper.DepartmentMapper;
 import com.admin.demo.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +17,7 @@ import java.util.*;
 
 @Transactional
 @Service
+@CacheConfig(cacheNames = "dept")
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
@@ -23,11 +28,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentMapper.findByRoleIds(id);
     }
 
+    @Cacheable(key = "#p0",unless="#result == null")
     @Override
     public List<Department> findByPid(Long id) {
         return departmentMapper.findByPid(id);
     }
 
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     @Override
     public Object buildTree(List<Department> departments) {
         List<Map<String,Object>> list = new LinkedList<>();
@@ -52,10 +59,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
     public List<Department> query(QueryVo queryVo) {
         return departmentMapper.query(queryVo);
     }
 
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName ",unless="#result == null")
     @Override
     public Object getDept(List<Department> departments) {
         List<Department> trees = new ArrayList<Department>();
@@ -79,6 +88,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         return map;
     }
 
+
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "dept",allEntries=true),
+            }
+    )
     @Override
     public void addDept(Department department) {
         Integer i = departmentMapper.check(department);
@@ -89,6 +104,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentMapper.addDept(department);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "dept",allEntries=true),
+            }
+    )
     @Override
     public void delDept(Long id) {
         Integer i = departmentMapper.checkRelated(id);
@@ -106,6 +126,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentMapper.delDept(id);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "dept",allEntries=true),
+            }
+    )
     @Override
     public void updateDept(Department department) {
         Integer i = departmentMapper.check(department);
