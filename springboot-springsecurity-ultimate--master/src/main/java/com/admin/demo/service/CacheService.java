@@ -6,7 +6,7 @@ public interface CacheService {
 
     Map<String, Object> getCache(Integer page, Integer size);
 
-    boolean delCache(String... key);
+    boolean delCache(String key);
 
     boolean flushdb();
 }

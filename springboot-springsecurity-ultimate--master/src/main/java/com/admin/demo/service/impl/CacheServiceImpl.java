@@ -39,7 +39,7 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public boolean delCache(String... key) {
+    public boolean delCache(String key) {
 
         try {
             redisUtil.del(key);

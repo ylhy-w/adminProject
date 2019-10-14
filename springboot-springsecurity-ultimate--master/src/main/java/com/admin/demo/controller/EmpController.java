@@ -38,17 +38,12 @@ public class EmpController {
         Map<String, Object> map = new HashMap<>();
         List<Employee> employeeByPage = empService.getEmps(page, size,
                 keywords, posId, deptId, beginDate);
-        Long count = empService.getEmpsCount(keywords, posId, deptId, beginDate);
+        Integer count = empService.getEmpsCount(keywords, posId, deptId, beginDate);
         map.put("emps", employeeByPage);
         map.put("count", count);
         return ResponseEntity.ok(map);
                 }
 
-                @GetMapping("/workId")
-                        public ResponseEntity getMaxWorkId(){
-            Long max=empService.getMaxWorkId();
-            return ResponseEntity.ok(max);
-                }
 
 
 }

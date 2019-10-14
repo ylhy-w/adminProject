@@ -46,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
                 mailRetrieveMapper.delete(findMailRetrieve.getAccount());
             }
             mailRetrieveMapper.save(mailRetrieve);
-            result = basePath + "reset_password?account=" + user.getUsername() + "&sid=" + Md5Encrypt.EncoderByMd5(sid);
+            result = basePath + "api/reset_password?account=" + user.getUsername() + "&sid=" + Md5Encrypt.EncoderByMd5(sid);
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("1184071961@qq.com");//发送者.
             message.setTo(user.getEmail());//接收者.

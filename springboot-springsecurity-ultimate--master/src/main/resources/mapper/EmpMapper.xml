@@ -12,7 +12,6 @@
         <result column="deptId" property="deptId"/>
         <result column="posId" property="posId"/>
         <result column="beginDate" property="beginDate"/>
-        <result column="workID" property="workID"/>
         <result column="dname" property="deptName"/>
         <result column="pname" property="posName"/>
     </resultMap>
@@ -33,7 +32,7 @@
             order by e.id limit #{start},#{size}
         </if>
     </select>
-    <select id="getEmpsCount" resultType="Long">
+    <select id="getEmpsCount" resultType="Integer">
         SELECT count(*) FROM employee e WHERE e.name LIKE concat('%',#{keywords},'%')
         <if test="posId!=null and posId!=''">
             AND e.posId=#{posId}

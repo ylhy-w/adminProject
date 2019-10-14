@@ -4,6 +4,7 @@ import com.admin.common.exception.BadRequestException;
 import com.admin.common.utils.JwtTokenUtil;
 import com.admin.common.utils.SecurityUtils;
 import com.admin.demo.entity.AuthenticationInfo;
+import com.admin.demo.entity.AuthorizationUser;
 import com.admin.demo.entity.User;
 import com.admin.demo.service.UserService;
 import com.admin.log.myLog;
@@ -28,7 +29,7 @@ public class AuthenticationController {
 
     @myLog(value = "用户登录")
     @PostMapping(value = "${jwt.auth.path}")
-    public ResponseEntity login(User authorizationUser){
+    public ResponseEntity login(AuthorizationUser authorizationUser){
 
 
         User jwtUser = (User) selfUserDetailsService.loadUserByUsername(authorizationUser.getUsername());
@@ -65,6 +66,7 @@ public class AuthenticationController {
         final String token = jwtTokenUtil.generateToken(jwtUser);
         // 返回 token
         return ResponseEntity.ok(new AuthenticationInfo(token,jwtUser));
+
     }
 
 

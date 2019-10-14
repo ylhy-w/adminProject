@@ -18,7 +18,6 @@ public class Employee {
     private Long posId;
     private String posName;
     private String beginDate;
-    private String workID;
 
     @Override
     public String toString() {
@@ -34,7 +33,6 @@ public class Employee {
                 ", posId=" + posId +
                 ", posName='" + posName + '\'' +
                 ", beginDate='" + beginDate + '\'' +
-                ", workID='" + workID + '\'' +
                 '}';
     }
 }

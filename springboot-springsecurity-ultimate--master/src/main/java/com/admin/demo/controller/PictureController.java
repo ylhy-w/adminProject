@@ -10,7 +10,6 @@ import com.admin.demo.service.PictureService;
 import com.admin.demo.service.UserService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +80,8 @@ public class PictureController {
      */
     @myLog("批量删除图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
-    @DeleteMapping(value = "/deleteAll")
-    public ServerResponse deleteAll(@RequestBody Long[] ids) {
+    @DeleteMapping(value = "/deleteAll/{ids}")
+    public ServerResponse deleteAll(@PathVariable Long[] ids) {
         pictureService.deleteAll(ids);
         return  ServerResponse.createBySuccessMessage("删除成功");
     }

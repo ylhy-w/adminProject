@@ -56,8 +56,9 @@ public class PositionServiceImpl implements PositionService {
         map.put("total",total);
         return map ;
     }
-    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName",unless="#result == null")
     @Override
+
     public List<Position> getAll() {
         return positionMapper.getAll();
     }

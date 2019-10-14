@@ -53,6 +53,9 @@
     <select id="getUser" resultMap="lazyLoadPermissions">
         SELECT d.name as dname,p.name as pname,u.* FROM user u LEFT JOIN department d ON u.deptId=d.id LEFT JOIN position p on u.posId=p.id WHERE u.username=#{username}
     </select>
+
+
+
     <!-- 注册-->
     <insert id="register" useGeneratedKeys="true" keyProperty="id" parameterType="com.admin.demo.entity.User">
         insert into user set username=#{username},password=#{password},email=#{email},create_time=now()

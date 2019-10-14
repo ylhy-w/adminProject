@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.EmailToolMapper">
+
+    <update id="save">
+        update  email_config
+        <set>
+            from_user=#{fromUser},
+            host=#{host},
+            pass=#{pass},
+            port=#{port},
+            user=#{user}
+        </set>
+        where id =#{id}
+    </update>
+
+    <select id="findById" resultType="com.admin.demo.entity.EmailConfig" parameterType="Long">
+        select * from email_config where id = #{id}
+    </select>
+</mapper>

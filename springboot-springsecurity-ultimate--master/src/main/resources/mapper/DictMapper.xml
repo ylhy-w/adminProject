@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.DictMapper">
+    <select id="getCount" resultType="Integer">
+    select count(*) from dict where  name LIKE concat('%',#{keywords},'%') or  remark LIKE concat('%',#{keywords},'%')
+    </select>
+    <select id="getDict" resultType="com.admin.demo.entity.Dict">
+        select * from dict where  name LIKE concat('%',#{keywords},'%') or  remark LIKE concat('%',#{keywords},'%') limit #{start},#{size}
+    </select>
+
+    <select id="check" resultType="Integer">
+        select count(*) from dict where name = #{name}
+    <if test="id !=null and id != ''">
+        and id != #{id}
+    </if>
+    </select>
+
+    <insert id="addDict" useGeneratedKeys="true" keyProperty="id">
+        insert  into dict
+<set>
+    name = #{name},
+    <if test="remark !=null and remark !='' ">
+        remark = #{remark}
+    </if>
+</set>
+    </insert>
+
+    <update id="updateDict">
+        update dict
+        <set>
+                name = #{name},
+            <if test="remark !=null and remark !='' ">
+                remark = #{remark}
+            </if>
+        </set>
+        where id =#{id}
+    </update>
+
+    <delete id="delDict">
+    delete from dict where id = #{id}
+    </delete>
+</mapper>

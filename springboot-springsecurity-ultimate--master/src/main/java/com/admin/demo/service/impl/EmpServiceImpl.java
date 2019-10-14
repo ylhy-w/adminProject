@@ -19,23 +19,18 @@ public class EmpServiceImpl implements EmpService {
     @Autowired
     EmpMapper empMapper;
     @Override
-    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
+    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args ",unless="#result == null")
     public List<Employee> getEmps(Integer page, Integer size, String keywords, Long posId, Long deptId, String beginDate) {
         int start = (page - 1) * size;
         return empMapper.getEmps(start,size,keywords,posId,deptId,beginDate);
     }
 
     @Override
-    @Cacheable(key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#root.args[0] ",unless="#result == null")
-    public Long getEmpsCount(String keywords, Long posId, Long deptId, String beginDate) {
+    public Integer getEmpsCount(String keywords, Long posId, Long deptId, String beginDate) {
         return empMapper.getEmpsCount(keywords,posId,deptId,beginDate);
     }
 
-    @Override
-    public Long getMaxWorkId() {
-        Long maxWorkID = empMapper.getMaxWorkID();
-        return maxWorkID == null ? 0 : maxWorkID;
-    }
+
 
 
 }

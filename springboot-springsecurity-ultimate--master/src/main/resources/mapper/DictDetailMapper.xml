@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.demo.mapper.DictDetailMapper">
+    <select id="getCount" resultType="Integer">
+    select count(*) from dict_detail where  dict_id=#{dict_id}
+    </select>
+    <select id="getDictDetail" resultType="com.admin.demo.entity.DictDetail">
+        select d.name,dd.* from dict_detail dd,dict d where  dd.dict_id=#{dict_id} and d.id=#{dict_id}
+        limit #{start},#{size}
+    </select>
+
+    <select id="getDetailsMapCount" resultType="Integer">
+        select count(*) from dict_detail where  dict_id=#{dict_id}   and label LIKE concat('%',#{keywords},'%')
+    </select>
+
+    <select id="getDetailsMap" resultType="com.admin.demo.entity.DictDetail">
+        select d.name,dd.* from dict_detail dd,dict d where  dd.dict_id=#{dict_id} and d.id=#{dict_id} and dd.label LIKE concat('%',#{keywords},'%')
+        limit #{start},#{size}
+    </select>
+
+    <select id="findBydictId" resultType="com.admin.demo.entity.DictDetail">
+        select * from  dict_detail where dict_id =#{dict_id}
+    </select>
+
+    <delete id="delDictDetail">
+        delete from dict_detail where id =#{id}
+    </delete>
+
+    <select id="check" resultType="Integer">
+        select count(*) from dict_detail where label =#{label}
+<if test="id != null and id !='' ">
+    and id != #{id}
+</if>
+    </select>
+
+    <insert id="addDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into dict_detail
+        <set>
+            label = #{label},
+            dict_id = #{dictId},
+            sort = #{sort},
+            <if test="value !=null and value !='' ">
+                value = #{value}
+            </if>
+        </set>
+    </insert>
+<update id="updateDetail">
+    update dict_detail
+    <set>
+        label = #{label},
+        sort = #{sort},
+        <if test="value !=null and value !='' ">
+            value = #{value}
+        </if>
+    </set>
+    where id =#{id}
+</update>
+</mapper>

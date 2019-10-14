@@ -10,19 +10,15 @@ spring:
     minIdle: 5
     maxActive: 20
     maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
+    timeBetweenEvictionRunsMillis: 90000
+    minEvictableIdleTimeMillis: 1800000
     validationQuery: SELECT 1 FROM DUAL
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
     poolPreparedStatements: false
     maxPoolPreparedStatementPerConnectionSize: 20
-    connectionProperties:
-      druid:
-        stat:
-          mergeSql: true
-          slowSqlMillis: 5000
+
 
   redis:
     host: 47.101.190.181
@@ -38,7 +34,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 1184071961
-    password: hhdzqwmqjlzjggja
+    password: ghxbjgmeepvlhhah
     default-encoding: UTF-8
     properties:
       mail:

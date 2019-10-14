@@ -5,8 +5,7 @@ import com.admin.common.utils.ServerResponse;
 import com.admin.demo.service.CacheService;
 import com.admin.log.myLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +33,7 @@ public class CacheController {
     @myLog(value = "删除redis缓存")
     @DeleteMapping("/delCache")
     @PreAuthorize("hasAnyRole('ADMIN','REDIS_ALL','REDIS_DELETE')")
-    public ServerResponse delCache(String... key){
-//String... key 接收不定个数string入参
+    public ServerResponse delCache(String key){
         if (cacheService.delCache(key)) {
             return ServerResponse.createBySuccessMessage("删除成功");
         }
